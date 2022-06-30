@@ -7,8 +7,16 @@
             <div class="card">
                 <div class="card-header"> 
                     Articulo 
-                <a href="{{ route('posts.create')}}" class="btn btn-sm btn-primary" > crear</a>
+                    <form action="{{ route('posts.store')}}" method="POST">
+                        @csrf
+                        @method('CREATE')
+                    <div class="nb-3">
+                        <label for="" class="form-label">Titulo</label>
+                        <input id="title" name="title" type="text" class="form-control" tabindex="1">
+                    </div>
+                    <a href="{{ route('posts.store')}}" class="btn btn-sm btn-primary" > crear</a>
                 </div>
+            </form>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -16,7 +24,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                
                    <table class="table">
                     <thead>
                         <tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -38,7 +39,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post();
+
+        $post->title = $request->get('title');
+    
+        $post->save();
+
+        return back();
     }
 
     /**
@@ -60,7 +67,12 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        Post::edit([
+            'id' => $post->id,
+            'title' => $post->title,
+        ]);
+
+        return back();
     }
 
     /**
@@ -83,6 +95,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return back();
     }
 }
