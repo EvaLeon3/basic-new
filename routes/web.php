@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Backend\PageController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\Backend\PostController;
 
 /*
@@ -18,11 +18,10 @@ use App\Http\Controllers\Backend\PostController;
 
 Route::get('/', [PageController::class, 'posts']);
 Route::get('blog/{post}', [PageController::class, 'post'])->name('post');
+
 Route::get('posts', [PostController::class, 'store'])->name('posts.store');
 Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-
-
-
+Route::get('posts', [PostController::class, 'put'])->name('posts.put');
 
 
 Auth::routes();

@@ -7,16 +7,8 @@
             <div class="card">
                 <div class="card-header"> 
                     Articulo 
-                    <form action="{{ route('posts.store')}}" method="POST">
-                        @csrf
-                        @method('CREATE')
-                    <div class="nb-3">
-                        <label for="" class="form-label">Titulo</label>
-                        <input id="title" name="title" type="text" class="form-control" tabindex="1">
-                    </div>
-                    <a href="{{ route('posts.store')}}" class="btn btn-sm btn-primary" > crear</a>
+                    <a href="{{ route('posts.create')}}" class="btn btn-sm btn-primary" > Crear </a>
                 </div>
-            </form>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -39,7 +31,7 @@
                         <td>{{ $post->id }} </td>
                         <td>{{ $post->title }} </td>
                         <td>
-                        <a href="{{ route('posts.edit', $post)}}" class="btn-primary btn-sm"> Editar</a>    
+                        <a href="{{ route('posts.edit', $post->id) }}" class="btn-primary btn-sm"> Editar</a>    
                         </td>
                         <td>
                             <form action="{{ route('posts.destroy', $post) }}" method="POST">

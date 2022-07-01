@@ -28,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -39,13 +39,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post();
+        $request->validate([
+            'user_id' => 'required',
+            'title' => 'required|string',
+            'body' => 'required|string',
+        ]
+        );
+        
+        Post::create([
+            'user_id' => $request-> user_id,
+            'title' => $request-> title,
+            'body' => $request-> body
 
-        $post->title = $request->get('title');
-    
-        $post->save();
+        ]);
 
-        return back();
+        return redirect('posts');
     }
 
     /**
@@ -67,12 +75,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        Post::edit([
-            'id' => $post->id,
-            'title' => $post->title,
+        return view('posts.edit', [
+            'post' => $post
         ]);
-
-        return back();
     }
 
     /**
@@ -84,7 +89,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post = Post::find($post->id);
+        $post->title = $request->get('title');
+        $post->save();
+
+        return redirect('posts');
     }
 
     /**
