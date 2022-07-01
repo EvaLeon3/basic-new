@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header"> 
                     Articulo 
-                <a href="{{ route('posts.create')}}" class="btn btn-sm btn-primary" > crear</a>
+                    <a href="{{ route('posts.create')}}" class="btn btn-sm btn-primary" > Crear </a>
                 </div>
 
                 <div class="card-body">
@@ -16,7 +16,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                
                    <table class="table">
                     <thead>
                         <tr>
@@ -31,7 +31,7 @@
                         <td>{{ $post->id }} </td>
                         <td>{{ $post->title }} </td>
                         <td>
-                        <a href="{{ route('posts.edit', $post)}}" class="btn-primary btn-sm"> Editar</a>    
+                        <a href="{{ route('posts.edit', $post->id) }}" class="btn-primary btn-sm"> Editar</a>    
                         </td>
                         <td>
                             <form action="{{ route('posts.destroy', $post) }}" method="POST">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -27,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -38,7 +39,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required',
+            'title' => 'required|string',
+            'body' => 'required|string',
+        ]
+        );
+        
+        Post::create([
+            'user_id' => $request-> user_id,
+            'title' => $request-> title,
+            'body' => $request-> body
+
+        ]);
+
+        return redirect('posts');
     }
 
     /**
@@ -60,7 +75,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit', [
+            'post' => $post
+        ]);
     }
 
     /**
@@ -72,7 +89,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post = Post::find($post->id);
+        $post->title = $request->get('title');
+        $post->save();
+
+        return redirect('posts');
     }
 
     /**
@@ -83,6 +104,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return back();
     }
 }
