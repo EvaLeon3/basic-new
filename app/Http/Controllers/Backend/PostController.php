@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -37,34 +39,32 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
+        //validaciones 
         $request->validate([
             'user_id' => 'required',
             'title' => 'required|string',
             'body' => 'required|string',
         ]
         );
-        
-        Post::create([
-            'user_id' => $request-> user_id,
+
+        //salvar
+        $post = Post::create([
+            //'user_id' => $request-> user_id,
+            'user_id' => auth()-> user()->id,
             'title' => $request-> title,
             'body' => $request-> body
 
         ]);
 
-        return redirect('posts');
-    }
+        //imagen 
+        if($request->file('file')){
+            $post->image = $request->file('file')->store('posts', 'public');
+            $post->save();
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        //
+        return back()->with('status', 'Creado con exito');
     }
 
     /**
@@ -75,9 +75,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit', [
-            'post' => $post
-        ]);
+        //return view('posts.edit',[ 'post' => $post ]);
+
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -87,13 +87,23 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        $post = Post::find($post->id);
-        $post->title = $request->get('title');
-        $post->save();
+        //dd($request->all());
+        //$post = Post::find($post->id);
+        //$post->title = $request->get('title');
+        //$post->save();
+        //return redirect('posts');}
 
-        return redirect('posts');
+        $post->update($request->all());
+
+        if($request->file('file')){
+            Storage::disk('public')->delete($post->image);
+            $post->image = $request->file('file')->store('posts', 'public');
+            $post->save();
+        }
+
+        return back()->with('status', 'Actualizado con exito');
     }
 
     /**
@@ -104,8 +114,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        //$post->delete();
 
-        return back();
+        Storage::disk('public')->delete($post->image);
+            $post->delete();
+
+        return back()->with('status', 'Eliminado con exito');
     }
 }
+

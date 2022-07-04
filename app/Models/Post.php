@@ -35,8 +35,14 @@ class Post extends Model
     {
         return substr($this->body, 0, 140);
     }
+
+    public function getGetImagenAttribute()
+    {
+        if($this->image)
+            return url("storage/$this->image");
+    }
     
     protected $fillable = [
-        'title', 'body', 'user_id',
+        'title', 'body', 'user_id', 'iframe'
     ];
 }
